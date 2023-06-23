@@ -15,7 +15,7 @@ setup(
     entry_points={
         "console_scripts": [
             "copper_train = copper.train:main",
-            "copper_eval = copper.eval:main",
+            "copper_infer = copper.infer:main",
         ]
     },
 )

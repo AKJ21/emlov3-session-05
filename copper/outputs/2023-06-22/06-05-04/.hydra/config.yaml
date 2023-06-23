@@ -1,0 +1,51 @@
+task_name: train
+train: false
+test: true
+compile: false
+ckpt_path: null
+seed: null
+data:
+  _target_: copper.data.mnist_datamodule.MNISTDataModule
+  data_dir: ${paths.data_dir}
+  batch_size: 128
+  train_val_test_split:
+  - 55000
+  - 5000
+  - 10000
+  num_workers: 0
+  pin_memory: false
+model:
+  _target_: copper.models.mnist_module.MNISTLitModule
+  optimizer:
+    _target_: torch.optim.Adam
+    _partial_: true
+    lr: 0.001
+    weight_decay: 0.0
+  scheduler:
+    _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+    _partial_: true
+    mode: min
+    factor: 0.1
+    patience: 10
+  net:
+    _target_: copper.models.components.simple_dense_net.SimpleDenseNet
+    input_size: 784
+    lin1_size: 64
+    lin2_size: 128
+    lin3_size: 64
+    output_size: 10
+paths:
+  root_dir: .
+  data_dir: ${paths.root_dir}/data/
+  log_dir: ${paths.root_dir}/logs/
+  output_dir: ${hydra:runtime.output_dir}
+  work_dir: ${hydra:runtime.cwd}
+trainer:
+  _target_: lightning.pytorch.trainer.Trainer
+  default_root_dir: ${paths.output_dir}
+  min_epochs: 1
+  max_epochs: 2
+  accelerator: cpu
+  devices: 1
+  check_val_every_n_epoch: 1
+  deterministic: false

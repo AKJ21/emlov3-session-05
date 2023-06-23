@@ -1,0 +1,48 @@
+task_name: infer
+train: false
+test: true
+compile: false
+ckpt_path: null
+seed: 12345
+data:
+  _target_: copper.data.image_folder_datamodule.ImageFolderDataModule
+  train_dataset:
+    _target_: torchvision.datasets.ImageFolder
+    root: ${paths.data_dir}/PetImages_split/train
+  test_dataset:
+    _target_: torchvision.datasets.ImageFolder
+    root: ${paths.data_dir}/PetImages_split/test
+  batch_size: 64
+  num_workers: 0
+  pin_memory: false
+  image_size: 32
+model:
+  _target_: copper.models.vit_module.VitLitModule
+  num_classes: 2
+  optimizer:
+    _target_: torch.optim.Adam
+    _partial_: true
+    lr: 0.001
+    weight_decay: 0.0
+  scheduler:
+    _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+    _partial_: true
+    mode: min
+    factor: 0.1
+    patience: 10
+paths:
+  root_dir: .
+  data_dir: ${paths.root_dir}/data/
+  log_dir: ${paths.root_dir}/logs/
+  output_dir: ${hydra:runtime.output_dir}
+  work_dir: ${hydra:runtime.cwd}
+trainer:
+  _target_: lightning.pytorch.trainer.Trainer
+  default_root_dir: ${paths.output_dir}
+  min_epochs: 0
+  max_epochs: 1
+  accelerator: cpu
+  devices: 1
+  check_val_every_n_epoch: 1
+  deterministic: false
+  gradient_clip_val: 0.5

@@ -32,3 +32,5 @@ rich            # beautiful text formatting in terminal
 pytest          # tests
 black
 # sh            # for running bash commands in some tests (linux/macos only)
+
+dvc==3.1.0

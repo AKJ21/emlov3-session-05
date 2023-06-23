@@ -38,7 +38,7 @@ def train(cfg: DictConfig) -> Tuple[dict, dict]:
                     ckpt_path=cfg.get("ckpt_path"))
 
     train_metrics = trainer.callback_metrics
-
+    
     if cfg.get("test"):
         log.info("Starting testing!")
         ckpt_path = ""
