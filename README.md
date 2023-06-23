@@ -11,7 +11,7 @@
 3. To train ViT model : `copper_train experiment=cat_dog data.num_workers=16`.
 4. Infer model on cat/dog images: 
     - from projects' default test data folder : `copper_infer experiment=cat_dog`.
-    - from any random image from web : `copper_infer experiment=cat_dog imagepath=<image_path>`.
+    - from any random image from web (use image address in image_path): `copper_infer experiment=cat_dog imagepath=<image_path>`.
 
 ## DVC Setup
 - Initialized DVC using `dvc init`. (there should be a .dvc folder created in your project)
